@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mehboob Imtiaz — Developer</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #070708; --surface: #0f0f10; --border: #1c1c1f;
+      --text: #dcdcdc; --muted: #4a4a52; --accent: #b8ff3c; --accent2: #3effd8;
+      --font-display: 'Syne', sans-serif; --font-mono: 'DM Mono', monospace;
+    }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--font-mono); font-size: 14px; line-height: 1.7; cursor: none; }
+    #cursor { width:10px;height:10px;background:var(--accent);border-radius:50%;position:fixed;top:0;left:0;pointer-events:none;z-index:9999;mix-blend-mode:difference;transition:transform 0.1s ease; }
+    #cursor-ring { width:36px;height:36px;border:1px solid rgba(184,255,60,0.4);border-radius:50%;position:fixed;top:0;left:0;pointer-events:none;z-index:9998;transition:width 0.2s,height 0.2s,opacity 0.2s; }
+    body::before { content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:1000;opacity:0.6; }
+    nav { position:fixed;top:0;left:0;right:0;z-index:100;display:flex;justify-content:space-between;align-items:center;padding:24px 48px;border-bottom:1px solid transparent;transition:border-color 0.3s,background 0.3s; }
+    nav.scrolled { border-color:var(--border);background:rgba(7,7,8,0.92);backdrop-filter:blur(12px); }
+    .nav-logo { font-family:var(--font-display);font-weight:800;font-size:18px;letter-spacing:-0.5px;color:var(--text); }
+    .nav-logo span { color:var(--accent); }
+    .nav-links { display:flex;gap:36px;list-style:none; }
+    .nav-links a { color:var(--muted);text-decoration:none;font-size:12px;letter-spacing:0.08em;text-transform:uppercase;transition:color 0.2s; }
+    .nav-links a:hover { color:var(--accent); }
+    section { padding:120px 48px;max-width:1100px;margin:0 auto; }
+    #hero { min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding-top:80px;max-width:100%;padding-left:10vw;padding-right:10vw;position:relative; }
+    .hero-tag { font-size:11px;letter-spacing:0.15em;text-transform:uppercase;color:var(--accent);margin-bottom:28px;opacity:0;animation:fadeUp 0.6s 0.2s ease forwards; }
+    h1.hero-name { font-family:var(--font-display);font-size:clamp(56px,9vw,130px);font-weight:800;line-height:0.92;letter-spacing:-3px;color:var(--text);opacity:0;animation:fadeUp 0.7s 0.35s ease forwards;margin-bottom:32px; }
+    h1.hero-name em { color:var(--accent);font-style:normal;display:block; }
+    .hero-desc { max-width:520px;color:var(--muted);font-size:14px;line-height:1.8;opacity:0;animation:fadeUp 0.7s 0.5s ease forwards;margin-bottom:48px; }
+    .hero-actions { display:flex;gap:16px;flex-wrap:wrap;opacity:0;animation:fadeUp 0.7s 0.65s ease forwards; }
+    .btn { padding:13px 28px;font-family:var(--font-mono);font-size:12px;letter-spacing:0.1em;text-transform:uppercase;text-decoration:none;border-radius:2px;transition:all 0.2s;cursor:none;display:inline-block; }
+    .btn-primary { background:var(--accent);color:#070708;font-weight:500; }
+    .btn-primary:hover { background:#d4ff60;transform:translateY(-2px); }
+    .btn-ghost { border:1px solid var(--border);color:var(--muted); }
+    .btn-ghost:hover { border-color:var(--accent);color:var(--accent);transform:translateY(-2px); }
+    .hero-scroll { position:absolute;bottom:48px;left:10vw;font-size:11px;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted);display:flex;align-items:center;gap:12px;opacity:0;animation:fadeUp 0.7s 1s ease forwards; }
+    .hero-scroll::before { content:'';width:40px;height:1px;background:var(--muted); }
+    .section-label { font-size:11px;letter-spacing:0.15em;text-transform:uppercase;color:var(--accent);margin-bottom:16px;display:flex;align-items:center;gap:12px; }
+    .section-label::after { content:'';flex:1;height:1px;background:var(--border);max-width:80px; }
+    h2.section-title { font-family:var(--font-display);font-size:clamp(32px,4vw,52px);font-weight:700;letter-spacing:-1.5px;color:var(--text);line-height:1;margin-bottom:64px; }
+    .about-grid { display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start; }
+    .about-text p { color:var(--muted);margin-bottom:20px;font-size:14px;line-height:1.9; }
+    .about-text p strong { color:var(--text);font-weight:400; }
+    .about-detail-row { display:flex;justify-content:space-between;padding:16px 0;border-bottom:1px solid var(--border);font-size:13px; }
+    .about-detail-row:first-child { border-top:1px solid var(--border); }
+    .detail-label { color:var(--muted); }
+    .detail-val { color:var(--text);text-align:right; }
+    .detail-val a { color:var(--accent);text-decoration:none; }
+    .detail-val a:hover { text-decoration:underline; }
+    .skills-grid { display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:1px;background:var(--border);border:1px solid var(--border); }
+    .skill-block { background:var(--bg);padding:32px 28px;transition:background 0.2s; }
+    .skill-block:hover { background:var(--surface); }
+    .skill-block-label { font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:var(--accent);margin-bottom:20px; }
+    .skill-tags { display:flex;flex-wrap:wrap;gap:8px; }
+    .skill-tag { font-size:12px;color:var(--muted);padding:5px 10px;border:1px solid var(--border);transition:all 0.2s; }
+    .skill-tag:hover { color:var(--text);border-color:var(--muted); }
+    .projects-list { display:flex;flex-direction:column;gap:1px;background:var(--border);border:1px solid var(--border); }
+    .project-card { background:var(--bg);padding:40px;display:grid;grid-template-columns:1fr auto;gap:24px;align-items:start;transition:background 0.2s;cursor:none; }
+    .project-card:hover { background:var(--surface); }
+    .project-card:hover .project-arrow { color:var(--accent);transform:translate(4px,-4px); }
+    .project-num { font-size:11px;color:var(--muted);letter-spacing:0.1em;margin-bottom:12px; }
+    .project-name { font-family:var(--font-display);font-size:24px;font-weight:700;letter-spacing:-0.5px;color:var(--text);margin-bottom:12px; }
+    .project-desc { color:var(--muted);font-size:13px;line-height:1.8;max-width:560px;margin-bottom:20px; }
+    .project-stack { display:flex;flex-wrap:wrap;gap:8px; }
+    .stack-tag { font-size:11px;padding:3px 10px;border:1px solid var(--border);color:var(--accent2);letter-spacing:0.05em; }
+    .project-arrow { font-size:22px;color:var(--muted);transition:color 0.2s,transform 0.2s;padding-top:4px; }
+    .ach-grid { display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);border:1px solid var(--border); }
+    .ach-card { background:var(--bg);padding:32px 36px;transition:background 0.2s; }
+    .ach-card:hover { background:var(--surface); }
+    .ach-icon { font-size:22px;margin-bottom:16px; }
+    .ach-title { font-family:var(--font-display);font-size:16px;font-weight:600;color:var(--text);margin-bottom:8px;letter-spacing:-0.3px; }
+    .ach-sub { font-size:12px;color:var(--muted);line-height:1.7; }
+    #contact { text-align:center; }
+    .contact-sub { color:var(--muted);font-size:14px;max-width:440px;margin:0 auto 48px;line-height:1.8; }
+    .contact-links { display:flex;justify-content:center;gap:16px;flex-wrap:wrap; }
+    footer { border-top:1px solid var(--border);padding:32px 48px;display:flex;justify-content:space-between;align-items:center;color:var(--muted);font-size:12px; }
+    @keyframes fadeUp { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:translateY(0)} }
+    .reveal { opacity:0;transform:translateY(32px);transition:opacity 0.6s ease,transform 0.6s ease; }
+    .reveal.visible { opacity:1;transform:translateY(0); }
+    @media(max-width:768px){
+      nav{padding:20px 24px}.nav-links{gap:20px}
+      #hero{padding-left:24px;padding-right:24px}
+      section{padding:80px 24px}
+      .about-grid{grid-template-columns:1fr;gap:48px}
+      .ach-grid{grid-template-columns:1fr}
+      .project-card{grid-template-columns:1fr}
+      footer{flex-direction:column;gap:12px;text-align:center}
+    }
+  </style>
+</head>
+<body>
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
+
+<nav id="nav">
+  <div class="nav-logo">M<span>.</span>I</div>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<section id="hero">
+  <p class="hero-tag">// Available for opportunities</p>
+  <h1 class="hero-name">Mehboob<em>Imtiaz</em></h1>
+  <p class="hero-desc">Computer Science student specialising in Data Science — building systems that work, from offline emergency networks to ML pipelines. I write code that solves real problems.</p>
+  <div class="hero-actions">
+    <a href="#projects" class="btn btn-primary">View Projects</a>
+    <a href="mailto:mehboob.imtiaz@gmail.com" class="btn btn-ghost">Get In Touch</a>
+  </div>
+  <div class="hero-scroll">Scroll to explore</div>
+</section>
+
+<section id="about">
+  <p class="section-label reveal">01 — About</p>
+  <h2 class="section-title reveal">Who I am</h2>
+  <div class="about-grid">
+    <div class="about-text reveal">
+      <p>I'm a <strong>B.Tech. Computer Science (Data Science)</strong> student at G.L. Bajaj Institute of Technology and Management, graduating in 2026. I build across the stack — backend systems, ML models, and everything in between.</p>
+      <p>From engineering an <strong>offline peer-to-peer messaging system</strong> using Go and mDNS, to training ML models for fake news detection, I thrive at the intersection of systems thinking and data-driven problem solving.</p>
+      <p>I competed in the <strong>Amazon ML Challenge 2025</strong> among 6,500+ teams, applying LightGBM, Ridge Regression, and advanced feature engineering under real competitive pressure.</p>
+    </div>
+    <div class="about-details reveal">
+      <div class="about-detail-row"><span class="detail-label">Location</span><span class="detail-val">Greater Noida, UP, India</span></div>
+      <div class="about-detail-row"><span class="detail-label">Education</span><span class="detail-val">B.Tech. CS (Data Science), 2026</span></div>
+      <div class="about-detail-row"><span class="detail-label">Phone</span><span class="detail-val">+91 8700445687</span></div>
+      <div class="about-detail-row"><span class="detail-label">Email</span><span class="detail-val"><a href="mailto:mehboob.imtiaz@gmail.com">mehboob.imtiaz@gmail.com</a></span></div>
+      <div class="about-detail-row"><span class="detail-label">GitHub</span><span class="detail-val"><a href="https://github.com/meh2023" target="_blank">github.com/meh2023</a></span></div>
+      <div class="about-detail-row"><span class="detail-label">LinkedIn</span><span class="detail-val"><a href="https://linkedin.com/in/mehboob-imtiaz" target="_blank">linkedin.com/in/mehboob-imtiaz</a></span></div>
+    </div>
+  </div>
+</section>
+
+<section id="skills">
+  <p class="section-label reveal">02 — Skills</p>
+  <h2 class="section-title reveal">What I work with</h2>
+  <div class="skills-grid reveal">
+    <div class="skill-block"><p class="skill-block-label">Languages</p><div class="skill-tags"><span class="skill-tag">Python</span><span class="skill-tag">Go</span><span class="skill-tag">C/C++</span><span class="skill-tag">SQL</span><span class="skill-tag">HTML/CSS</span></div></div>
+    <div class="skill-block"><p class="skill-block-label">Frameworks</p><div class="skill-tags"><span class="skill-tag">Flask</span><span class="skill-tag">FastAPI</span><span class="skill-tag">React</span><span class="skill-tag">Node.js</span></div></div>
+    <div class="skill-block"><p class="skill-block-label">Tools</p><div class="skill-tags"><span class="skill-tag">Git</span><span class="skill-tag">Docker</span><span class="skill-tag">VS Code</span><span class="skill-tag">AWS</span></div></div>
+    <div class="skill-block"><p class="skill-block-label">Concepts</p><div class="skill-tags"><span class="skill-tag">DSA</span><span class="skill-tag">OOP</span><span class="skill-tag">REST APIs</span><span class="skill-tag">ML Basics</span><span class="skill-tag">mDNS / P2P</span></div></div>
+    <div class="skill-block"><p class="skill-block-label">Cloud & Security</p><div class="skill-tags"><span class="skill-tag">Cloud Architecting</span><span class="skill-tag">Cloud Foundations</span><span class="skill-tag">Cybersecurity</span></div></div>
+    <div class="skill-block"><p class="skill-block-label">Coursework</p><div class="skill-tags"><span class="skill-tag">Big Data</span><span class="skill-tag">DBMS</span><span class="skill-tag">OS</span><span class="skill-tag">Cloud Computing</span></div></div>
+  </div>
+</section>
+
+<section id="projects">
+  <p class="section-label reveal">03 — Projects</p>
+  <h2 class="section-title reveal">Things I've built</h2>
+  <div class="projects-list reveal">
+    <div class="project-card">
+      <div>
+        <p class="project-num">001</p>
+        <p class="project-name">DisasterNet</p>
+        <p class="project-desc">An offline emergency communication system for situations without internet. Uses mDNS for automatic device discovery on local networks and peer-to-peer messaging — no infrastructure required.</p>
+        <div class="project-stack"><span class="stack-tag">Go</span><span class="stack-tag">mDNS</span><span class="stack-tag">P2P Networking</span></div>
+      </div>
+      <div class="project-arrow">↗</div>
+    </div>
+    <div class="project-card">
+      <div>
+        <p class="project-num">002</p>
+        <p class="project-name">Fake News Detection</p>
+        <p class="project-desc">ML classifier that separates real news from fake using NLP text preprocessing techniques. Comes with a Flask web interface for live prediction testing against the trained model.</p>
+        <div class="project-stack"><span class="stack-tag">Python</span><span class="stack-tag">Flask</span><span class="stack-tag">NLP</span><span class="stack-tag">Scikit-learn</span></div>
+      </div>
+      <div class="project-arrow">↗</div>
+    </div>
+    <div class="project-card">
+      <div>
+        <p class="project-num">003</p>
+        <p class="project-name">Stock Price Prediction</p>
+        <p class="project-desc">Analysed historical stock data to predict short-term price trends. Trained a regression model with Python and evaluated performance using standard metrics to validate predictive accuracy.</p>
+        <div class="project-stack"><span class="stack-tag">Python</span><span class="stack-tag">Regression</span><span class="stack-tag">Pandas</span><span class="stack-tag">Data Analysis</span></div>
+      </div>
+      <div class="project-arrow">↗</div>
+    </div>
+  </div>
+</section>
+
+<section id="achievements">
+  <p class="section-label reveal">04 — Recognition</p>
+  <h2 class="section-title reveal">Achievements & Certs</h2>
+  <div class="ach-grid reveal">
+    <div class="ach-card"><div class="ach-icon">⚡</div><p class="ach-title">Amazon ML Challenge 2025</p><p class="ach-sub">Competed among 6,500+ teams. Applied LightGBM and Ridge Regression with feature engineering and model tuning under real competitive pressure.</p></div>
+    <div class="ach-card"><div class="ach-icon">☁️</div><p class="ach-title">AWS Academy — Cloud Architecting</p><p class="ach-sub">Official AWS Academy certification in cloud architecture principles, design patterns, and best practices for scalable systems.</p></div>
+    <div class="ach-card"><div class="ach-icon">🔧</div><p class="ach-title">AWS Academy — Cloud Foundations</p><p class="ach-sub">Foundational AWS certification covering core cloud concepts, services, and infrastructure management on AWS.</p></div>
+    <div class="ach-card"><div class="ach-icon">🐍</div><p class="ach-title">Python Essentials I — Cisco</p><p class="ach-sub">Cisco Networking Academy certification validating core Python programming knowledge and fundamentals.</p></div>
+    <div class="ach-card"><div class="ach-icon">🔒</div><p class="ach-title">Intro to Cybersecurity — Cisco</p><p class="ach-sub">Cisco Networking Academy certification covering security fundamentals, threat landscapes, and defensive techniques.</p></div>
+    <div class="ach-card" style="background:var(--surface)"><div class="ach-icon">🎓</div><p class="ach-title">B.Tech. CS — Data Science</p><p class="ach-sub">G.L. Bajaj Institute of Technology & Management, Greater Noida. Expected graduation: 2026.</p></div>
+  </div>
+</section>
+
+<section id="contact">
+  <p class="section-label reveal" style="justify-content:center">05 — Contact</p>
+  <h2 class="section-title reveal">Let's work together</h2>
+  <p class="contact-sub reveal">Open to internships, collaborations, and interesting problems. If you're building something cool, I'd love to hear about it.</p>
+  <div class="contact-links reveal">
+    <a href="mailto:mehboob.imtiaz@gmail.com" class="btn btn-primary">mehboob.imtiaz@gmail.com</a>
+    <a href="https://github.com/meh2023" target="_blank" class="btn btn-ghost">GitHub</a>
+    <a href="https://linkedin.com/in/mehboob-imtiaz" target="_blank" class="btn btn-ghost">LinkedIn</a>
+  </div>
+</section>
+
+<footer>
+  <span>© 2025 Mehboob Imtiaz</span>
+  <span>Vanilla JS &amp; CSS</span>
+</footer>
+
+<script>
+  // Custom cursor
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursor-ring');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    cursor.style.transform = `translate(${mx - 5}px, ${my - 5}px)`;
+  });
+  (function animRing() {
+    rx += (mx - rx - 18) * 0.12;
+    ry += (my - ry - 18) * 0.12;
+    ring.style.transform = `translate(${rx}px, ${ry}px)`;
+    requestAnimationFrame(animRing);
+  })();
+  document.querySelectorAll('a, .project-card, .skill-block, .ach-card').forEach(el => {
+    el.addEventListener('mouseenter', () => { ring.style.width='60px'; ring.style.height='60px'; ring.style.opacity='0.5'; });
+    el.addEventListener('mouseleave', () => { ring.style.width='36px'; ring.style.height='36px'; ring.style.opacity='1'; });
+  });
+
+  // Sticky nav
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => nav.classList.toggle('scrolled', scrollY > 40));
+
+  // Scroll reveal
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) { setTimeout(() => e.target.classList.add('visible'), i * 80); observer.unobserve(e.target); }
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  // Active nav highlight
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('.nav-links a');
+  window.addEventListener('scroll', () => {
+    let cur = '';
+    sections.forEach(s => { if (scrollY >= s.offsetTop - 120) cur = s.id; });
+    navLinks.forEach(a => { a.style.color = a.getAttribute('href') === `#${cur}` ? 'var(--accent)' : ''; });
+  });
+</script>
+</body>
+</html>
